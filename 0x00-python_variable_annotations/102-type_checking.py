@@ -9,7 +9,7 @@ from typing import List, Tuple
 
 def zoom_array(lst: Tuple, factor: int = 2) -> List:
     """
-        a type-annotated function named zoom_array 
+        a type-annotated function named zoom_array
         with the parameters lst of type tuple and
         factor of type int and a return value of tuple
     """
