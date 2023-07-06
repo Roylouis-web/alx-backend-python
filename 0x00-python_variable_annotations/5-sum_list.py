@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-from typing import List
-
 """
     Module for a type-annotated function called sum_list
 """
+
+from typing import List
 
 
 def sum_list(input_list: List[float]) -> float:
@@ -14,8 +14,4 @@ def sum_list(input_list: List[float]) -> float:
         returns their sum as a float
     """
 
-    a: int = 0
-
-    for num in input_list:
-        a += num
-    return a
+    return sum(input_list)
