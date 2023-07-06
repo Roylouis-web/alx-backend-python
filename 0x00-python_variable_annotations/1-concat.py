@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
     Module for a type-annotated function named concat
 """
