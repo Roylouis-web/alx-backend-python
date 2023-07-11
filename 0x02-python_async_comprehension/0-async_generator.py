@@ -6,7 +6,7 @@
 
 from asyncio import sleep
 from typing import Iterator
-from random import randint
+from random import randrange
 
 
 async def async_generator() -> Iterator[int]:
@@ -18,6 +18,6 @@ async def async_generator() -> Iterator[int]:
     i: int = 1
 
     while i <= 10:
-        yield randint(0, 10)
+        yield randrange(0, 10)
         await sleep(1)
         i += 1
