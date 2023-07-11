@@ -5,11 +5,11 @@
 '''
 
 from asyncio import sleep
-from typing import Iterator
+from typing import Generator
 from random import uniform
 
 
-async def async_generator() -> Iterator[float]:
+async def async_generator() -> Generator[float, None, None]:
     '''
         A coroutine named async_genrator
         that takes no argument and yields an integer
