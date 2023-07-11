@@ -19,10 +19,5 @@ async def measure_runtime() -> float:
     '''
 
     initial_time = perf_counter()
-    await gather(
-            async_comprehension(),
-            async_comprehension(),
-            async_comprehension(),
-            async_comprehension()
-            )
+    await gather(*(async_comprehension() for i in range(4)))
     return perf_counter() - initial_time

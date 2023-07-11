@@ -9,7 +9,7 @@ from typing import Iterator
 from random import uniform
 
 
-async def async_generator() -> Iterator[int]:
+async def async_generator() -> Iterator[float]:
     '''
         A coroutine named async_genrator
         that takes no argument and yields an integer
