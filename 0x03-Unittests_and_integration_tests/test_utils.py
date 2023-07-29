@@ -5,11 +5,10 @@
 """
 
 from unittest import TestCase
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 from parameterized import parameterized
 from utils import access_nested_map, get_json, memoize
 from utils import requests
-from typing import Union
 
 
 class TestAccessNestedMap(TestCase):
@@ -66,3 +65,40 @@ class TestGetJson(TestCase):
             mocked_get(test_url).json.return_value = test_payload
             self.assertEqual(get_json(test_url), test_payload)
             mocked_get.assert_called_with(test_url)
+
+
+class TestMemoize(TestCase):
+    """
+        Contains a method that tests the memoize function
+    """
+
+    def test_memoize(self):
+        """
+            Tests that the memoize function returns
+            the right output
+        """
+
+        class TestClass:
+            """
+                A test class
+            """
+
+            def a_method(self):
+                """
+                    A test method
+                """
+                return 42
+
+            @memoize
+            def a_property(self):
+                """
+                    A test method
+                """
+                return self.a_method()
+
+        with patch.object(TestClass, 'a_method') as mocked:
+            mocked.return_value = 42
+            temp = TestClass()
+            self.assertEqual(temp.a_property, 42)
+            self.assertEqual(temp.a_property, 42)
+            mocked.assert_called_once()
