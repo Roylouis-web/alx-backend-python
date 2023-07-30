@@ -65,16 +65,22 @@ class TestGithubOrgClient(TestCase):
                 temp = GithubOrgClient('org')
                 mocked2.return_value = "https://github.com"
                 temp._public_repos_url = mocked2.return_value
-                mocked1.return_value = [{
-                        "name": "Merchandise",
-                        "repos_url": "https://github.com"
-                }]
+                mocked1.return_value = [
+                        {
+                            "name": "Merchandise",
+                            "repos_url": "https://github.com"
+                        },
+                        {
+                            "name": "Car-Life",
+                            "repos_url": "https://github.com"
+                        }
+                ]
                 self.assertEqual(
                         temp._public_repos_url,
                         mocked2())
                 self.assertEqual(
                         temp.public_repos(),
-                        [mocked1.return_value[0]["name"]])
+                        [r["name"] for r in mocked1.return_value])
                 mocked1.assert_called_once()
                 mocked2.assert_called_once()
 
