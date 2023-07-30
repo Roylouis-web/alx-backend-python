@@ -54,10 +54,11 @@ class TestGithubOrgClient(TestCase):
             self.assertEqual(temp._public_repos_url, url)
 
     @parameterized.expand([
-        ('https://github.com/Roylouis-web/merchandise.git'),
-        ('https://github.com/Roylouis-web/Car-App.git')
+        ('netflix'),
+        ('github'),
+        ('google')
     ])
-    def test_public_repos(self, repo_url):
+    def test_public_repos(self, org):
         """
             Tests the public_repos method
         """
@@ -66,19 +67,16 @@ class TestGithubOrgClient(TestCase):
             with patch.object(
                     GithubOrgClient,
                     '_public_repos_url') as mocked2:
-                temp = GithubOrgClient('org')
-                mocked2.return_value = repo_url
-                temp._public_repos_url = mocked2.return_value
+                temp = GithubOrgClient(org)
+                url = temp.ORG_URL.format(org=org)
                 mocked1.return_value = [
                         {
-                            "name": "Merchandise",
-                            "repos_url": mocked2.return_value
-                        },
-                        {
-                            "name": "Car-Life",
-                            "repos_url": mocked2.return_value
+                            "name": org,
+                            "repos_url": url
                         }
                 ]
+                mocked2.return_value = url
+                temp._public_repos_url = mocked2.return_value
                 self.assertEqual(
                         temp._public_repos_url,
                         mocked2())
