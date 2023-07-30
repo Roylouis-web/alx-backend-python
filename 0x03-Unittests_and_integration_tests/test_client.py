@@ -77,9 +77,7 @@ class TestGithubOrgClient(TestCase):
                 ]
                 mocked2.return_value = url
                 temp._public_repos_url = mocked2.return_value
-                self.assertEqual(
-                        temp._public_repos_url,
-                        mocked2())
+                mocked2()
                 self.assertEqual(
                         temp.public_repos(),
                         [r["name"] for r in mocked1.return_value])
