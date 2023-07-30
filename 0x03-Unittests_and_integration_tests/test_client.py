@@ -68,12 +68,26 @@ class TestGithubOrgClient(TestCase):
                         "repos_url": "https://github.com"
                 }]
                 mocked2.return_value = "https://github.com"
-                temp._public_repos_url = mocked2.return_value
                 self.assertEqual(
-                        temp._public_repos_url,
-                        mocked2())
+                        temp._public_repos_url(),
+                        mocked2.return_value)
                 self.assertEqual(
                         temp.public_repos(),
                         [mocked1.return_value[0]["name"]])
                 mocked1.assert_called_once()
                 mocked2.assert_called_once()
+
+    @parameterized.expand([
+        (
+            {'license': {'key': 'my_license'}}, 'my_license',
+            True),
+        ({'license': {'key': 'other_license'}}, 'my_license',         False)
+    ])
+    def test_has_license_key(self, repo, license, result):
+        """"
+            Tests the has_license_key method
+        """
+
+        self.assertEqual(
+                GithubOrgClient.has_license(repo, license),
+                result)
