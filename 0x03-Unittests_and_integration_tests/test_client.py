@@ -63,14 +63,15 @@ class TestGithubOrgClient(TestCase):
                     GithubOrgClient,
                     '_public_repos_url') as mocked2:
                 temp = GithubOrgClient('org')
+                mocked2.return_value = "https://github.com"
+                temp._public_repos_url = mocked2.return_value
                 mocked1.return_value = [{
                         "name": "Merchandise",
                         "repos_url": "https://github.com"
                 }]
-                mocked2.return_value = "https://github.com"
                 self.assertEqual(
-                        temp._public_repos_url(),
-                        mocked2.return_value)
+                        temp._public_repos_url,
+                        mocked2())
                 self.assertEqual(
                         temp.public_repos(),
                         [mocked1.return_value[0]["name"]])
@@ -83,7 +84,7 @@ class TestGithubOrgClient(TestCase):
             True),
         ({'license': {'key': 'other_license'}}, 'my_license',         False)
     ])
-    def test_has_license_key(self, repo, license, result):
+    def test_has_license(self, repo, license, result):
         """"
             Tests the has_license_key method
         """
