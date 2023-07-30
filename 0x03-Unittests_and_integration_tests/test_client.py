@@ -52,3 +52,25 @@ class TestGithubOrgClient(TestCase):
             temp.org = mocked.return_value
             url = temp.ORG_URL.format(org=org)
             self.assertEqual(temp._public_repos_url, url)
+
+    def test_public_repos(self):
+        """
+            Tests the public_repos method
+        """
+
+        with patch('client.get_json') as mocked1:
+            with patch.object(
+                    GithubOrgClient,
+                    '_public_repos_url') as mocked2:
+                temp = GithubOrgClient('org')
+                mocked1.return_value = [{
+                        "name": "Merchandise",
+                        "repos_url": "https://github.com"
+                }]
+                mocked2.return_value = "https://github.com"
+                temp._public_repos_url = mocked2()
+                self.assertEqual(
+                        temp.public_repos(),
+                        [mocked1.return_value[0]["name"]])
+                mocked1.assert_called_once()
+                mocked2.assert_called_once()
