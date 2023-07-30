@@ -34,3 +34,21 @@ class TestGithubOrgClient(TestCase):
             }
             self.assertEqual(temp.org, mocked.return_value)
             mocked.assert_called_once_with(temp.ORG_URL.format(org=org))
+
+    @parameterized.expand([
+        ('google'),
+        ('abc')
+    ])
+    def test_public_repos_url(self, org):
+        """
+            tests the _public_repos_url property
+        """
+
+        with patch.object(GithubOrgClient, "org") as mocked:
+            temp = GithubOrgClient(org)
+            mocked.return_value = {
+                    "repos_url": temp.ORG_URL.format(org=org)
+            }
+            temp.org = mocked.return_value
+            url = temp.ORG_URL.format(org=org)
+            self.assertEqual(temp._public_repos_url, url)
