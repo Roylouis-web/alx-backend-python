@@ -29,6 +29,8 @@ class TestGithubOrgClient(TestCase):
 
         with patch('client.get_json') as mocked:
             temp = GithubOrgClient(org)
-            self.assertEqual(temp.org, temp.org)
-            print(mocked.__dict__)
+            mocked.return_value = {
+                    "repos_url": temp.ORG_URL.format(org=org)
+            }
+            self.assertEqual(temp.org, mocked.return_value)
             mocked.assert_called_once_with(temp.ORG_URL.format(org=org))
