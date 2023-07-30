@@ -10,7 +10,6 @@ from parameterized import parameterized
 from utils import access_nested_map, get_json, memoize
 from utils import requests
 
-
 class TestAccessNestedMap(TestCase):
     """
         contains methods that test the access_nested_map
