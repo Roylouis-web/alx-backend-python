@@ -66,15 +66,16 @@ class TestGithubOrgClient(TestCase):
         with patch('client.get_json') as mocked1:
             with patch.object(GithubOrgClient,
                               '_public_repos_url') as mocked2:
+                url = f'https://github.com/{org}'
                 mocked1.return_value = [{
-                    "name": "FastApi",
-                    "repos_url": "https://github.com/fastApi"
+                    'name': org,
+                    'repos_url': url
                 }]
-                mocked2.return_value = "https://github.com"
-                temp = GithubOrgClient('google')
+                mocked2.return_value = url
+                temp = GithubOrgClient(org)
                 self.assertEqual(temp.public_repos(),
-                                 [r['name'] for r in
-                                  mocked1.return_value])
+                                 [r['name'] for r
+                                  in mocked1.return_value])
                 self.assertEqual(temp._public_repos_url(),
                                  mocked2.return_value)
                 mocked1.assert_called_once()
