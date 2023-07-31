@@ -63,7 +63,13 @@ class TestGithubOrgClient(TestCase):
                               '_public_repos_url') as mocked2:
                 url = 'https://github.com'
                 mocked1.return_value = [{
-                        'name': 'github',
+                        'name': {
+                            'first_name': 'Le Roy',
+                            'last_name': 'Powell-Louis'
+                        },
+                        'license': {
+                            'key': {'my_license'}
+                        },
                         'repos_url': 'https://github.com'
                 }]
                 mocked2.return_value = url
