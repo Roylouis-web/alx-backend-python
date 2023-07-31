@@ -6,8 +6,9 @@
 
 from unittest import TestCase
 from unittest.mock import patch
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
 import client
+import requests
 from client import GithubOrgClient
 
 
@@ -96,3 +97,40 @@ class TestGithubOrgClient(TestCase):
         self.assertEqual(
                 GithubOrgClient.has_license(repo, license),
                 result)
+
+
+@parameterized_class([
+    {
+        'url': 'https://github.com/fastApi',
+        'payload': [{
+            'name': 'fastApi',
+            'repos_url': 'https://github.com/fastApi'
+        }]
+    },
+    {
+        'url': 'https://github.com/nodejs',
+        'payload': [{
+            'name': 'nodejs',
+            'repos_url': 'https://github.com/fastApi'
+        }]
+    }
+])
+class TestIntegrationGithubOrgClient(TestCase):
+    """
+       class for integeration test for public_repos method
+    """
+
+    @patch('request.get')
+    def setUpClass(self, mocked_get):
+        """
+            set up class
+        """
+
+        self.get_patched = patch().start()
+        mocked_get(self.url).json().side_effect = self.payload
+
+    def tearDownClass(self):
+        """
+            tear down class
+        """
+        self.get_patched.stop()
