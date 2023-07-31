@@ -63,8 +63,8 @@ class TestGithubOrgClient(TestCase):
                               '_public_repos_url') as mocked2:
                 url = 'https://github.com'
                 mocked1.return_value = [{
-                    'name': 'github',
-                    'repos_url': url
+                        'name': 'github',
+                        'repos_url': 'https://github.com'
                 }]
                 mocked2.return_value = url
                 temp = GithubOrgClient('org')
@@ -73,7 +73,7 @@ class TestGithubOrgClient(TestCase):
                                   mocked1.return_value])
                 self.assertEqual(temp._public_repos_url(),
                                  mocked2.return_value)
-                mocked1.assert_called_once()
+                mocked1.assert_called_once_with(mocked2)
                 mocked2.assert_called_once()
 
     @parameterized.expand([
