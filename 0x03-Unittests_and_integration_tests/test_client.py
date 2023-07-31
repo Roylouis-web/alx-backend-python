@@ -64,23 +64,19 @@ class TestGithubOrgClient(TestCase):
         """
 
         with patch('client.get_json') as mocked1:
-            with patch.object(
-                    GithubOrgClient,
-                    '_public_repos_url') as mocked2:
-                temp = GithubOrgClient(org)
-                url = temp.ORG_URL.format(org=org)
-                mocked1.return_value = [
-                        {
-                            "name": org,
-                            "repos_url": url
-                        }
-                ]
-                mocked2.return_value = url
-                temp._public_repos_url = mocked2.return_value
-                mocked2()
-                self.assertEqual(
-                        temp.public_repos(),
-                        [r["name"] for r in mocked1.return_value])
+            with patch.object(GithubOrgClient,
+                              '_public_repos_url') as mocked2:
+                mocked1.return_value = [{
+                    "name": "FastApi",
+                    "repos_url": "https://github.com/fastApi"
+                }]
+                mocked2.return_value = "https://github.com"
+                temp = GithubOrgClient('google')
+                self.assertEqual(temp.public_repos(),
+                                 [r['name'] for r in
+                                  mocked1.return_value])
+                self.assertEqual(temp._public_repos_url(),
+                                 mocked2.return_value)
                 mocked1.assert_called_once()
                 mocked2.assert_called_once()
 
@@ -92,7 +88,7 @@ class TestGithubOrgClient(TestCase):
     ])
     def test_has_license(self, repo, license, result):
         """"
-            Tests the has_license_key method
+            Tests the has_ilicense_key method
         """
 
         self.assertEqual(
