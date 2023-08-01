@@ -54,34 +54,34 @@ class TestGithubOrgClient(TestCase):
             url = temp.ORG_URL.format(org=org)
             self.assertEqual(temp._public_repos_url, url)
 
-    def test_public_repos(self):
+    @patch('client.get_json')
+    def test_public_repos(self, mocked1):
         """
             Tests the public_repos method
         """
 
-        with patch('client.get_json') as mocked1:
-            with patch.object(GithubOrgClient,
-                              '_public_repos_url') as mocked2:
-                url = 'https://github.com'
-                mocked1.return_value = [{
-                        'name': {
-                            'first_name': 'Le Roy',
-                            'last_name': 'Powell-Louis'
-                        },
-                        'license': {
-                            'key': {'my_license'}
-                        },
-                        'repos_url': 'https://github.com'
+        with patch.object(GithubOrgClient,
+                          '_public_repos_url') as mocked2:
+            url = 'https://github.com'
+            mocked1.return_value = [{
+                    'name': {
+                        'first_name': 'Le Roy',
+                        'last_name': 'Powell-Louis'
+                    },
+                    'license': {
+                        'key': {'my_license'}
+                    },
+                    'repos_url': 'https://github.com'
                 }]
-                mocked2.return_value = url
-                temp = GithubOrgClient('org')
-                self.assertEqual(temp.public_repos(),
-                                 [r['name'] for r in
-                                  mocked1.return_value])
-                self.assertEqual(temp._public_repos_url(),
-                                 mocked2.return_value)
-                mocked1.assert_called_once_with(mocked2)
-                mocked2.assert_called_once()
+            mocked2.return_value = url
+            temp = GithubOrgClient('org')
+            self.assertEqual(temp.public_repos(),
+                             [r['name'] for r in
+                             mocked1.return_value])
+            self.assertEqual(temp._public_repos_url(),
+                             mocked2.return_value)
+            mocked1.assert_called_once_with(mocked2)
+            mocked2.assert_called_once()
 
     @parameterized.expand([
         (
@@ -120,13 +120,13 @@ class TestIntegrationGithubOrgClient(TestCase):
        class for integeration test for public_repos method
     """
 
-    @patch('request.get')
-    def setUpClass(self, mocked_get):
+    def setUpClass(self):
         """
             set up class
         """
 
-        self.get_patched = patch().start()
+        mocked_get = patch('requests.get')
+        self.get_patched = mocked_get.start()
         mocked_get(self.url).json().side_effect = self.payload
 
     def tearDownClass(self):
